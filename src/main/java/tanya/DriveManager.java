@@ -7,6 +7,8 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.Test;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class DriveManager {
     private static ThreadLocal<WebDriver> threadDriver = new ThreadLocal<>();
@@ -25,6 +27,9 @@ public class DriveManager {
         if (browser.equalsIgnoreCase("chrome")) {
             WebDriverManager.chromedriver().setup();
             threadDriver.set(new ChromeDriver());
+            //threadDriver.get().manage().window().fullscreen();
+            threadDriver.get().manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
+            threadDriver.get().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         }
         if (browser.equalsIgnoreCase("firefox")) {
             WebDriverManager.firefoxdriver().setup();
@@ -34,9 +39,13 @@ public class DriveManager {
             WebDriverManager.edgedriver().setup();
             threadDriver.set(new EdgeDriver());
         }
+
+
     }
 
+
     public static void killDriver() {
+        threadDriver.get().close();
         threadDriver.get().quit();
         threadDriver.remove();
     }

@@ -3,6 +3,7 @@ package tanya.elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -26,9 +27,8 @@ public class BaseElement {
     }
 
     protected WebElement get() {
-        WebElement element = getDriver().findElement(locator);
-        highlight(element);
-        return element;
+        isExists(1);
+        return getDriver().findElement(locator);
     }
 
     public boolean isExists(long... timeout) {
@@ -39,7 +39,7 @@ public class BaseElement {
         WebDriverWait wait = new WebDriverWait(getDriver(), currentTimeout);
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-            get();
+            highlight(locator);
             return true;
         } catch (Exception e) {
             return false;
@@ -58,10 +58,19 @@ public class BaseElement {
         Assert.assertTrue(isExists());
     }
 
-    private void highlight(WebElement element) {
+    public void setFocusOn() {
+        Actions moveTo = new Actions(getDriver()).moveToElement(get());
+        moveTo.build().perform();
+    }
+
+
+    private void highlight(By elementLocator) {
         unhighlight();
-        lastElement = element;
-        lastBorder = (String) ((JavascriptExecutor) getDriver()).executeScript("arguments[0].setAttribute('style', arguments[1]);", element, "color: yellow; border: 2px solid yellow;");
+        try {
+            lastElement = getDriver().findElement(elementLocator);
+            lastBorder = (String) ((JavascriptExecutor) getDriver()).executeScript("arguments[0].setAttribute('style', arguments[1]);", lastElement, "color: yellow; border: 2px solid yellow;");
+        } catch (Exception e) {
+        }
 
     }
 
@@ -69,7 +78,9 @@ public class BaseElement {
         if (lastElement != null) {
             try {
                 ((JavascriptExecutor) getDriver()).executeScript("arguments[0].setAttribute('style', arguments[1]);", lastElement, lastBorder);
-            } finally {
+            } catch (Exception e)
+            {}
+            finally {
                 lastElement = null;
             }
         }
