@@ -27,7 +27,7 @@ public class DriveManager {
         if (browser.equalsIgnoreCase("chrome")) {
             WebDriverManager.chromedriver().setup();
             threadDriver.set(new ChromeDriver());
-            //threadDriver.get().manage().window().fullscreen();
+            threadDriver.get().manage().window().fullscreen();
             threadDriver.get().manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
             threadDriver.get().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         }

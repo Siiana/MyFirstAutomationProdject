@@ -8,7 +8,7 @@ import static tanya.DriveManager.*;
 public class BaseTest {
     @BeforeClass
     public void setupPage(){
-        goTo("http://magento.mainacad.com/index.php/english/");
+        goTo("http://magento.mainacad.com");
     }
 
     @AfterClass
