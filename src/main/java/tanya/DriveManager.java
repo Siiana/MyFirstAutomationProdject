@@ -3,10 +3,10 @@ package tanya;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.annotations.Test;
+
 
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +28,7 @@ public class DriveManager {
         if (browser.equalsIgnoreCase("chrome")) {
             WebDriverManager.chromedriver().setup();
             //ChromeOptions options = new ChromeOptions();
-           // options.setHeadless(true);
+            // options.setHeadless(true);
             threadDriver.set(new ChromeDriver());
             //threadDriver.get().manage().window().fullscreen();
             threadDriver.get().manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
@@ -42,8 +42,6 @@ public class DriveManager {
             WebDriverManager.edgedriver().setup();
             threadDriver.set(new EdgeDriver());
         }
-
-
     }
 
 
@@ -52,7 +50,7 @@ public class DriveManager {
         threadDriver.remove();
     }
 
-    public static void goTo(String url) {
+    public static void goTo(String url){
         getDriver().navigate().to(url);
     }
 }

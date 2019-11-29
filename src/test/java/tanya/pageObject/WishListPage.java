@@ -1,19 +1,19 @@
 package tanya.pageObject;
 
-import lombok.Getter;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import tanya.elements.Button;
-import tanya.elements.InputField;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static tanya.DriveManager.getDriver;
 
-public class WishList extends AbstractPage {
+public class WishListPage extends AbstractPage {
+
     private By itemName = By.cssSelector(" .product-name");
 
+    @Step
     public List<String> getItemNames() {
         List<String> forReturn = new ArrayList<>();
         for (WebElement element: getDriver().findElements(itemName)){

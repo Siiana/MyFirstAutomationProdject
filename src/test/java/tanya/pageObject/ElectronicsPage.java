@@ -1,5 +1,6 @@
 package tanya.pageObject;
 
+import io.qameta.allure.Step;
 import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -10,7 +11,7 @@ import tanya.elements.DropDownList;
 import tanya.elements.TextField;
 import tanya.helpers.StringProcessor;
 
-import javax.imageio.metadata.IIOMetadataNode;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -32,6 +33,11 @@ public class ElectronicsPage extends AbstractPage {
     private By filterPrice = By.xpath("(//a/span[@class='price']//..)[1]");
     private By addToWishList = By.cssSelector(" .add-to-links  .link-wishlist");
     private By itemName = By.cssSelector("#products-list .product-name");
+    private By gridView = By.xpath(" //strong[@title='Grid'][1]");
+    private By addToShoppingCart = By.cssSelector(" .product-info  button[title='Add to Cart']");
+    private By productItemGridSort = By.xpath("//div[@class='category-products']/ul/li");
+    private By itemNameGridSort = By.xpath("//h2[@class='product-name']");
+    private By priceGridSort = By.cssSelector(" .product-info  .regular-price > .price");
 
     @Getter
     private Button ShowAsList = new Button(showAsListBtn, "Show as list");
@@ -51,22 +57,25 @@ public class ElectronicsPage extends AbstractPage {
     @Getter
     private Button FilterPrice = new Button(filterPrice, " $0.00 - $99.99 filter in PRICE");
 
+    @Getter
+    private Button GridView = new Button(gridView, "Grid View");
 
 
-
+    @Step
     public ElectronicsPage clickShowAsList() {
         getShowAsList().click();
         return this;
     }
 
+    @Step
     public ElectronicsPage clickShowDropDown(String value) {
         getShowSelectionList().select(value);
         return this;
     }
 
     public int getProductsNumber() {
-        List<WebElement> welist = getDriver().findElements(productInList);
-        return welist.size();
+        List<WebElement> productList = getDriver().findElements(productInList);
+        return productList.size();
     }
 
     public ElectronicsPage clickNextPgBtn() {
@@ -76,6 +85,7 @@ public class ElectronicsPage extends AbstractPage {
         return this;
     }
 
+    @Step
     public void checkNumbersOfItemsOnEachPage(int expectedItems) {
         int pageNumber = 1;
         do {
@@ -123,33 +133,36 @@ public class ElectronicsPage extends AbstractPage {
         }
     }
 
+    @Step
     public ElectronicsPage setPrice(SortBy SortBy) {
         getShowPrice().select(SortBy.toString());
         return this;
     }
 
-    private double parcePrice(String value) {
+    @Step
+    private double parsePrice(String value) {
         return Double.parseDouble(value.substring(1).replace(",", ""));
     }
 
-    public ElectronicsPage checkSortingLogic(SortDirection direction) {
+    @Step
+    public ElectronicsPage checkSortingPrice(SortDirection direction) {
         List<WebElement> items = getDriver().findElements(productItem);
         LinkedList<Double> itemsPriceList = new LinkedList<Double>();
 
-        for ( WebElement item : items) {
+        for (WebElement item : items) {
             try {
                 WebElement element = item.findElement(productItemPrice);
                 String value = element.getAttribute("innerHTML");
 
                 if (value.length() > 0) {
-                    itemsPriceList.add(parcePrice(value));
+                    itemsPriceList.add(parsePrice(value));
                 } else {
                     throw new NumberFormatException();
                 }
             } catch (NoSuchElementException e) {
                 items = item.findElements(productItemOldPrice);
                 item.getAttribute("innerHTML");
-                if(items.size() == 0) {
+                if (items.size() == 0) {
                     e.printStackTrace();
                     throw new NoSuchElementException("Product price box not rendered");
                 }
@@ -159,23 +172,23 @@ public class ElectronicsPage extends AbstractPage {
             }
         }
 
-        for ( int index = 1; index < itemsPriceList.size(); index++) {
+        for (int index = 1; index < itemsPriceList.size(); index++) {
             Double priceA = itemsPriceList.get(index - 1);
             Double priceB = itemsPriceList.get(index);
-
             int compValue = priceA.compareTo(priceB);
             boolean result = compValue == direction.value || compValue == 0;
-
-            Assert.assertTrue(result, String.format("Items are not sordted {%s} properly {%f <> %f}", direction.toString(), priceA, priceB)); // a > b
+            Assert.assertTrue(result, String.format("Items are not sorted {%s} properly {%f <> %f}", direction.toString(), priceA, priceB)); // a > b
         }
         return this;
     }
 
+    @Step
     public ElectronicsPage clickFilterPrice() {
         getFilterPrice().click();
         return this;
     }
 
+    @Step
     public void checkFilterPrice() {
         List<WebElement> eltList = getDriver().findElements(filterPrice);
         for (WebElement e : eltList) {
@@ -184,15 +197,39 @@ public class ElectronicsPage extends AbstractPage {
         }
     }
 
+    @Step
     public String clickAddToWishList() {
         String toReturn;
         List<WebElement> items = getDriver().findElements(productItem);
         WebElement randomItem = items.get(new Random().nextInt(items.size() - 1));
-        toReturn=randomItem.findElement(itemName).getText();
+        toReturn = randomItem.findElement(itemName).getText();
         WebElement wishBtn = randomItem.findElement(addToWishList);
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", wishBtn);
-                wishBtn.click();
+        wishBtn.click();
         return toReturn;
+    }
+
+    @Step
+    public ElectronicsPage clickGridViewBtn(){
+        getGridView().click();
+        return this;
+    }
+
+
+    @Step
+    public String clickAddToShoppingCart() {
+        String toReturn;
+        //String price;
+        List<WebElement> items = getDriver().findElements(productItemGridSort);
+        WebElement randomItem = items.get(new Random().nextInt(items.size() - 1));
+        toReturn = randomItem.findElement(itemNameGridSort).getText();
+        //price= randomItem.findElement(priceGridSort).getText();
+        WebElement shoppingCartBtn = randomItem.findElement(addToShoppingCart);
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", shoppingCartBtn);
+        shoppingCartBtn.click();
+        return toReturn;
+
+
     }
 }
 

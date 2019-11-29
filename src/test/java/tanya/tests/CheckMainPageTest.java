@@ -1,14 +1,12 @@
 package tanya.tests;
 
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import tanya.pageObject.ElectronicsPage;
-import tanya.pageObject.LoginPage;
 import tanya.pageObject.MainPage;
-import tanya.pageObject.WishList;
-
+import tanya.pageObject.ShoppingCartPage;
+import tanya.pageObject.WishListPage;
 import java.util.List;
 
 public class CheckMainPageTest extends BaseTest {
@@ -25,7 +23,6 @@ public class CheckMainPageTest extends BaseTest {
 
     @Test
     public void checkItemsCounter() {
-
         int num = mainPage
                 .clickHomeAndDecorButton()
                 .clickOnElectronicsItem()
@@ -37,7 +34,6 @@ public class CheckMainPageTest extends BaseTest {
 
     @Test
     public void checkShowSelect() {
-
         mainPage.clickHomeAndDecorButton()
                 .clickOnElectronicsItem()
                 .clickShowAsList()
@@ -46,21 +42,18 @@ public class CheckMainPageTest extends BaseTest {
     }
 
     @Test
-    public void checkSortBy() {
-
+    public void checkSortByPrice() {
         mainPage.clickHomeAndDecorButton()
                 .clickOnElectronicsItem()
                 .clickShowAsList()
                 .clickShowDropDown("25")
                 .setPrice(ElectronicsPage.SortBy.PRICE)
-                .checkSortingLogic(ElectronicsPage.SortDirection.ASK);
+                .checkSortingPrice(ElectronicsPage.SortDirection.ASK);
     }
 
     @Test
     public void checkPriceFilter() {
-
-        mainPage
-                .clickHomeAndDecorButton()
+        mainPage.clickHomeAndDecorButton()
                 .clickOnElectronicsItem()
                 .clickShowAsList()
                 .clickShowDropDown("25")
@@ -76,26 +69,32 @@ public class CheckMainPageTest extends BaseTest {
                 .clickShowAsList()
                 .clickShowDropDown("25")
                 .clickAddToWishList();
-        List<String> actualNames = new WishList().getItemNames();
-        Assert.assertTrue(actualNames.contains(expectedProductName),String.format("Expected product %s not found in list %s", expectedProductName, actualNames));
+        List<String> actualNames = new WishListPage().getItemNames();
+        Assert.assertTrue(actualNames.contains(expectedProductName), String.format("Expected product %s not found in list %s", expectedProductName, actualNames));
 
 
     }
 
     @Test
     public void checkSale() {
-
-
+        mainPage.clickOnSale()
+                .clickGridView()
+                .clickShowDropDown("36")
+                .comparePrices();
     }
 
     @Test
     public void checkShoppingCart() {
-
-        mainPage
+        String expectedProductName = mainPage
                 .clickHomeAndDecorButton()
                 .clickOnElectronicsItem()
-                // інша кнопка сортування
-                .clickShowDropDown("25");
+                .clickGridViewBtn()
+                .clickShowDropDown("36")
+                .clickAddToShoppingCart();
+        List<String> actualNames = new ShoppingCartPage().getItemNames();
+        Assert.assertTrue(actualNames.contains(expectedProductName), String.format("Expected product %s not found in list %s", expectedProductName, actualNames));
+
+
 
     }
 
