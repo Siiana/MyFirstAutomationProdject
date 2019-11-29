@@ -22,6 +22,14 @@ public class BaseElement {
         this.description = description;
     }
 
+    public void scrollToMe(){
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", get());
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
     public By getLocator() {
         return locator;
     }

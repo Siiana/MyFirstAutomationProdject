@@ -1,17 +1,32 @@
 package tanya.tests;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import tanya.pageObject.Electronics;
+import tanya.pageObject.ElectronicsPage;
+import tanya.pageObject.LoginPage;
 import tanya.pageObject.MainPage;
+import tanya.pageObject.WishList;
 
-public class CheckMainPage extends BaseTest {
+import java.util.List;
+
+public class CheckMainPageTest extends BaseTest {
+    private MainPage mainPage;
+
+    @BeforeMethod
+    public void login() {
+        mainPage = new MainPage()
+                .setLanguage(MainPage.Language.AUTOMATION)
+                .openLoginPage()
+                .loginWithUserNamePassword("siianaelfiyka@gmail.com", "123456");
+    }
+
 
     @Test
     public void checkItemsCounter() {
-        MainPage mainPage = new MainPage();
 
-        int num = mainPage.setLanguage(MainPage.Language.AUTOMATION)
+        int num = mainPage
                 .clickHomeAndDecorButton()
                 .clickOnElectronicsItem()
                 .clickShowAsList()
@@ -22,10 +37,8 @@ public class CheckMainPage extends BaseTest {
 
     @Test
     public void checkShowSelect() {
-        MainPage mainPage = new MainPage();
 
-        mainPage.setLanguage(MainPage.Language.AUTOMATION)
-                .clickHomeAndDecorButton()
+        mainPage.clickHomeAndDecorButton()
                 .clickOnElectronicsItem()
                 .clickShowAsList()
                 .clickShowDropDown("5")
@@ -34,20 +47,19 @@ public class CheckMainPage extends BaseTest {
 
     @Test
     public void checkSortBy() {
-        MainPage mainPage = new MainPage();
-        mainPage.setLanguage(MainPage.Language.AUTOMATION)
-                .clickHomeAndDecorButton()
+
+        mainPage.clickHomeAndDecorButton()
                 .clickOnElectronicsItem()
                 .clickShowAsList()
-                //.clickShowDropDown("25")
-                .setPrice(Electronics.SortBy.PRICE)
-                .checkSortingLogic(Electronics.SortDirection.ASK);
+                .clickShowDropDown("25")
+                .setPrice(ElectronicsPage.SortBy.PRICE)
+                .checkSortingLogic(ElectronicsPage.SortDirection.ASK);
     }
 
     @Test
     public void checkPriceFilter() {
-        MainPage mainPage = new MainPage();
-        mainPage.setLanguage(MainPage.Language.AUTOMATION)
+
+        mainPage
                 .clickHomeAndDecorButton()
                 .clickOnElectronicsItem()
                 .clickShowAsList()
@@ -57,30 +69,29 @@ public class CheckMainPage extends BaseTest {
     }
 
     @Test
-    public void  checkAddWishList() {
-        MainPage mainPage = new MainPage();
-        mainPage.setLanguage(MainPage.Language.AUTOMATION)
+    public void checkAddWishList() {
+        String expectedProductName = mainPage
                 .clickHomeAndDecorButton()
                 .clickOnElectronicsItem()
                 .clickShowAsList()
                 .clickShowDropDown("25")
                 .clickAddToWishList();
+        List<String> actualNames = new WishList().getItemNames();
+        Assert.assertTrue(actualNames.contains(expectedProductName),String.format("Expected product %s not found in list %s", expectedProductName, actualNames));
 
 
     }
 
     @Test
-    public void  checkSale() {
-        MainPage mainPage = new MainPage();
-        mainPage.setLanguage(MainPage.Language.AUTOMATION)
-                ;
+    public void checkSale() {
+
 
     }
 
     @Test
-    public void  checkShoppingCart() {
-        MainPage mainPage = new MainPage();
-        mainPage.setLanguage(MainPage.Language.AUTOMATION)
+    public void checkShoppingCart() {
+
+        mainPage
                 .clickHomeAndDecorButton()
                 .clickOnElectronicsItem()
                 // інша кнопка сортування

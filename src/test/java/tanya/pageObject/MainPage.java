@@ -10,11 +10,8 @@ public class MainPage extends AbstractPage{
     private By languageDropDown = By.id("select-language");
     private By homeAndDecorMenu = By.xpath("//a[@class='level0 has-children'][contains(text(),'Home & Decor')]");
     private By electronics = By.xpath("//a[contains(text(),'Electronics')]");
-
-    /*public DropDownList getLanguageDropDown() {
-        return new DropDownList(languageDropDown, "Language DropDown list");
-    }*/
-
+    private By account = By.cssSelector(".skip-account.skip-link > .label");
+    private By login = By.cssSelector("[title='Log In']");
 
     @Getter
     DropDownList LanguageDropDown = new DropDownList(languageDropDown, "Language dropdown list");
@@ -24,6 +21,15 @@ public class MainPage extends AbstractPage{
 
     @Getter
     Button Electronics = new Button(electronics, "Electronics");
+
+    @Getter
+    private Button Account = new Button(account, "Account");
+
+    @Getter
+    private Button Login = new Button (login, "Login");
+
+
+
 
 
     public enum Language {
@@ -52,9 +58,21 @@ public class MainPage extends AbstractPage{
         return this;
     }
 
-    public Electronics clickOnElectronicsItem() {
+    public ElectronicsPage clickOnElectronicsItem() {
         getElectronics().click();
-        return new Electronics();
+        return new ElectronicsPage();
+    }
+
+    public MainPage openAccountMenu() {
+        getAccount().click();
+        return this;
+    }
+
+
+    public LoginPage openLoginPage() {
+        openAccountMenu();
+        getLogin().click();
+        return new LoginPage();
     }
 
 

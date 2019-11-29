@@ -3,6 +3,7 @@ package tanya;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.Test;
@@ -26,8 +27,10 @@ public class DriveManager {
         String browser = System.getProperty("browser", "chrome");
         if (browser.equalsIgnoreCase("chrome")) {
             WebDriverManager.chromedriver().setup();
+            //ChromeOptions options = new ChromeOptions();
+           // options.setHeadless(true);
             threadDriver.set(new ChromeDriver());
-            threadDriver.get().manage().window().fullscreen();
+            //threadDriver.get().manage().window().fullscreen();
             threadDriver.get().manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
             threadDriver.get().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         }
@@ -45,7 +48,6 @@ public class DriveManager {
 
 
     public static void killDriver() {
-        threadDriver.get().close();
         threadDriver.get().quit();
         threadDriver.remove();
     }
