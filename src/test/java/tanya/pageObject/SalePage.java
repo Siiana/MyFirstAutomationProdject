@@ -42,7 +42,7 @@ public class SalePage extends AbstractPage {
         return this;
     }
 
-    //Generates list of pairs (Old and Sale prices) for each element. For each pair compares Old and Sale values
+
     public void comparePrices() {
         List<WebElement> weList = getDriver().findElements(itemAllPrices);
         for (WebElement we : weList) {

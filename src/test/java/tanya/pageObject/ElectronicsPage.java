@@ -210,26 +210,45 @@ public class ElectronicsPage extends AbstractPage {
     }
 
     @Step
-    public ElectronicsPage clickGridViewBtn(){
+    public ElectronicsPage clickGridViewBtn() {
         getGridView().click();
         return this;
     }
 
 
     @Step
-    public String clickAddToShoppingCart() {
-        String toReturn;
-        //String price;
+    public String checkShoppingCartItemName() {
+        String itemName;
         List<WebElement> items = getDriver().findElements(productItemGridSort);
         WebElement randomItem = items.get(new Random().nextInt(items.size() - 1));
-        toReturn = randomItem.findElement(itemNameGridSort).getText();
-        //price= randomItem.findElement(priceGridSort).getText();
+        itemName = randomItem.findElement(itemNameGridSort).getText();
         WebElement shoppingCartBtn = randomItem.findElement(addToShoppingCart);
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", shoppingCartBtn);
         shoppingCartBtn.click();
-        return toReturn;
-
-
+        return itemName;
     }
+
+    @Step
+    public String checkShoppingCartPrice() {
+        String price;
+        List<WebElement> items = getDriver().findElements(productItemGridSort);
+        WebElement randomItem = items.get(new Random().nextInt(items.size() - 1));
+        price = randomItem.findElement(priceGridSort).getText();
+        WebElement shoppingCartBtn = randomItem.findElement(addToShoppingCart);
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", shoppingCartBtn);
+        shoppingCartBtn.click();
+        return price;
+    }
+
+    @Step
+    public ShoppingCartPage addItemInkShoppingCart() {
+        List<WebElement> items = getDriver().findElements(productItemGridSort);
+        WebElement randomItem = items.get(new Random().nextInt(items.size() - 1));
+        WebElement shoppingCartBtn = randomItem.findElement(addToShoppingCart);
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", shoppingCartBtn);
+        shoppingCartBtn.click();
+        return new ShoppingCartPage();
+    }
+
 }
 

@@ -1,0 +1,13 @@
+<suite name="TestSuite" thread-count="7" parallel="classes">
+    <test name="myTests">
+        <classes>
+            <class name="tanya.tests.CheckAddWishListTest"/>
+            <class name="tanya.tests.CheckItemsCounterTest"/>
+            <class name="tanya.tests.CheckShowSelectTest"/>
+            <class name="tanya.tests.CheckPriceFilterTest"/>
+            <class name="tanya.tests.CheckSaleTest"/>
+            <class name="tanya.tests.CheckShoppingCartTest"/>
+            <class name="tanya.tests.CheckSortByPriceTest"/>
+        </classes>
+    </test>
+</suite>
