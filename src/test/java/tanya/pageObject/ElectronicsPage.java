@@ -19,6 +19,7 @@ import java.util.Random;
 
 import static tanya.DriveManager.getDriver;
 
+
 public class ElectronicsPage extends AbstractPage {
 
     private By showAsListBtn = By.xpath("//*[@title='List'][1]");
@@ -38,6 +39,8 @@ public class ElectronicsPage extends AbstractPage {
     private By productItemGridSort = By.xpath("//div[@class='category-products']/ul/li");
     private By itemNameGridSort = By.xpath("//h2[@class='product-name']");
     private By priceGridSort = By.cssSelector(" .product-info  .regular-price > .price");
+    private By itemAsGrid = By.xpath("//li[@class='item last']//button/parent::*/../..");
+    private By itemAsList = By.xpath("//*[@id='products-list']/li");
 
     @Getter
     private Button ShowAsList = new Button(showAsListBtn, "Show as list");
@@ -59,6 +62,8 @@ public class ElectronicsPage extends AbstractPage {
 
     @Getter
     private Button GridView = new Button(gridView, "Grid View");
+
+    public ProductItem productItems = new ProductItem();
 
 
     @Step
@@ -240,14 +245,36 @@ public class ElectronicsPage extends AbstractPage {
         return price;
     }
 
+
+    public CartPage clickAddToCart() {
+        String returnName = "";
+        String returnPrice = "";
+
+        Random randomGenerator = new Random();
+        //Add all products to list, find random - i
+        List<WebElement> weList = getDriver().findElements(itemAsGrid);
+
+        int numOfItems = weList.size() - 1;
+        int i = randomGenerator.nextInt(numOfItems);
+
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", weList.get(i));
+        returnName = productItems.getNameInGridView().getText();
+        returnPrice = productItems.getItemPrice().getText();
+        weList.get(i).findElement(productItems.getAddToCart().getLocator()).click();
+        return new CartPage(returnName, returnPrice);
+    }
+
     @Step
-    public ShoppingCartPage addItemInkShoppingCart() {
-        List<WebElement> items = getDriver().findElements(productItemGridSort);
-        WebElement randomItem = items.get(new Random().nextInt(items.size() - 1));
-        WebElement shoppingCartBtn = randomItem.findElement(addToShoppingCart);
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", shoppingCartBtn);
-        shoppingCartBtn.click();
-        return new ShoppingCartPage();
+    public ProductDetails clickRandomProduct() {
+        Random randomGenerator = new Random();
+        //Add all products to list, find random - i
+        List<WebElement> weList = getDriver().findElements(itemAsGrid);
+        int numOfItems = weList.size() - 1;
+        int i = randomGenerator.nextInt(numOfItems);
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", weList.get(i));
+        //Opens product details
+        weList.get(i).click();
+        return new ProductDetails();
     }
 
 }

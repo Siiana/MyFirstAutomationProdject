@@ -53,7 +53,7 @@ public class ShoppingCartPage extends AbstractPage {
 
     public String getGrandTotalPrice(WebElement element){
         String textGrandTotalPrice = element.getText();
-        WebElement : element.findElements(subTotalPrice);
+        WebElement : element.findElements(grandTotalPrice);
         return textGrandTotalPrice;
     }
 
