@@ -6,9 +6,7 @@ import org.openqa.selenium.By;
 import tanya.elements.Button;
 import tanya.elements.TextField;
 
-/*
- *   POM: Product card (details)
- * */
+
 public class ProductItem {
 
     private By itemPrice = By.xpath("//div[@class='price-box']//span[@class='price']");

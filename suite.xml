@@ -1,4 +1,4 @@
-<suite name="TestSuite" thread-count="7" parallel="classes">
+<suite name="TestSuite" thread-count="3" parallel="classes">
     <test name="myTests">
         <classes>
             <class name="tanya.tests.CheckAddWishListTest"/>

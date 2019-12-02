@@ -30,9 +30,6 @@ public class DriveManager {
             //ChromeOptions options = new ChromeOptions();
             // options.setHeadless(true);
             threadDriver.set(new ChromeDriver());
-            //threadDriver.get().manage().window().fullscreen();
-            threadDriver.get().manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
-            threadDriver.get().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         }
         if (browser.equalsIgnoreCase("firefox")) {
             WebDriverManager.firefoxdriver().setup();
@@ -42,6 +39,9 @@ public class DriveManager {
             WebDriverManager.edgedriver().setup();
             threadDriver.set(new EdgeDriver());
         }
+        //threadDriver.get().manage().window().fullscreen();
+        threadDriver.get().manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
+        threadDriver.get().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
 

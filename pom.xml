@@ -81,6 +81,9 @@
               <value>${project.build.directory}/allure-results</value>
             </property>
           </systemProperties>
+          <systemPropertyVariables>
+            <languageName>automation</languageName>
+          </systemPropertyVariables>
         </configuration>
       </plugin>
       <plugin>
